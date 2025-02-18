@@ -1,3 +1,6 @@
+import React from "react";
+import PageHeader from "../../components/PageHeader";
+
 export default function EditContact() {
-    return "EditContact";
+    return <PageHeader title="Editar Matheus Lopes" />;
 }
