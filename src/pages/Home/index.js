@@ -18,7 +18,7 @@ export default function Home() {
             </InputSearchContainer>
             <Header>
                 <strong>3 Contatos</strong>
-                <a href="">Novo Contato</a>
+                <a href="/">Novo Contato</a>
             </Header>
             <ListContainer>
                 <header>
