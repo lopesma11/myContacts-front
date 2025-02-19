@@ -10,10 +10,12 @@ import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/trash-red.svg";
 import edit from "../../assets/images/icons/note-pencil-blue.svg";
 import { Link } from "react-router-dom";
+import Modal from "../../components/Modal";
 
 export default function Home() {
     return (
         <Container>
+            <Modal danger />
             <InputSearchContainer>
                 <input type="text" placeholder="Pesquise pelo nome..."></input>
             </InputSearchContainer>
