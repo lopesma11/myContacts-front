@@ -9,6 +9,7 @@ import {
 import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/trash-red.svg";
 import edit from "../../assets/images/icons/note-pencil-blue.svg";
+import { Link } from "react-router-dom";
 
 export default function Home() {
     return (
@@ -18,7 +19,7 @@ export default function Home() {
             </InputSearchContainer>
             <Header>
                 <strong>3 Contatos</strong>
-                <a href="/">Novo Contato</a>
+                <Link to="/new">Novo Contato</Link>
             </Header>
             <ListContainer>
                 <header>
@@ -37,55 +38,9 @@ export default function Home() {
                         <span>(19)98765-4321</span>
                     </div>
                     <div className="actions">
-                        <a href="/">
+                        <Link to="/edit/123">
                             <img src={edit} alt="Edit Icon" width="20px"></img>
-                        </a>
-                        <button onClick={() => {}}>
-                            <img
-                                src={trash}
-                                alt="Delete Icon"
-                                width="20px"
-                            ></img>
-                        </button>
-                    </div>
-                </Card>
-
-                <Card>
-                    <div className="info">
-                        <div className="contact-name">
-                            <strong>Matheus Lopes</strong>
-                            <small>instagram</small>
-                        </div>
-                        <span>matheuslopes@email.com</span>
-                        <span>(19)98765-4321</span>
-                    </div>
-                    <div className="actions">
-                        <a href="/">
-                            <img src={edit} alt="Edit Icon" width="20px"></img>
-                        </a>
-                        <button onClick={() => {}}>
-                            <img
-                                src={trash}
-                                alt="Delete Icon"
-                                width="20px"
-                            ></img>
-                        </button>
-                    </div>
-                </Card>
-
-                <Card>
-                    <div className="info">
-                        <div className="contact-name">
-                            <strong>Matheus Lopes</strong>
-                            <small>instagram</small>
-                        </div>
-                        <span>matheuslopes@email.com</span>
-                        <span>(19)98765-4321</span>
-                    </div>
-                    <div className="actions">
-                        <a href="/">
-                            <img src={edit} alt="Edit Icon" width="20px"></img>
-                        </a>
+                        </Link>
                         <button onClick={() => {}}>
                             <img
                                 src={trash}
