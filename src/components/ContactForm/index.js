@@ -1,52 +1,80 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Form, ButtonContainer } from "./styles";
 import FormGroup from "../FormGroup";
 import Input from "../Input";
 import Select from "../Select";
 import Button from "../Button";
 import PropTypes from "prop-types";
+import { prefetchDNS } from "react-dom";
 
 export default function ContactForm({ buttonLabel }) {
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [category, setCategory] = useState("");
+    const [errors, setErrors] = useState([]);
 
-    const emailInput = useRef(null);
+    const handleNameChange = (event) => {
+        setName(event.target.value);
 
-    const handleClick = () => {
-        console.log(emailInput.current.value);
+        if (!event.target.value) {
+            setErrors((prevState) => [
+                ...prevState,
+                { field: "name", message: "Nome é obrigatório" },
+            ]);
+        } else {
+            setErrors((prevState) =>
+                prevState.filter((error) => error.field !== "name")
+            );
+        }
     };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        console.log({
+            name,
+            email,
+            phone,
+            category,
+        });
+    };
+
     return (
-        <Form>
-            <button type="button" onClick={handleClick}>
-                Loga emailInput
-            </button>
+        <Form onSubmit={handleSubmit}>
             <FormGroup>
                 <Input
-                    value={name}
                     placeholder="Nome"
-                    onChange={(event) => setName(event.target.value)}
+                    value={name}
+                    onChange={handleNameChange}
                 />
             </FormGroup>
 
             <FormGroup>
                 <Input
-                    defaultValue="mathlopes@gmail.com"
                     placeholder="E-mail"
-                    ref={emailInput}
-                    onChange={(event) => console.log(event.target.value)}
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                 />
             </FormGroup>
 
-            {/* <FormGroup error="O formato do e-mail é inválido">
-                <Input placeholder="E-mail" error />
-            </FormGroup> */}
-
             <FormGroup>
-                <Input placeholder="Telefone" />
+                <Input
+                    placeholder="Telefone"
+                    value={phone}
+                    onChange={(event) => setPhone(event.target.value)}
+                />
             </FormGroup>
 
             <FormGroup>
-                <Select>
-                    <option value="instagram">Instagram</option>
+                <Select
+                    value={category}
+                    onChange={(event) => setCategory(event.target.value)}
+                >
+                    <option value="">Categoria</option>
+                    <option value="instagram">Twitter</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="tiktok">Tiktok</option>
                 </Select>
             </FormGroup>
 
