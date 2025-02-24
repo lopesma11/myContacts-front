@@ -24,6 +24,7 @@ export default function useErrors() {
     };
 
     return {
+        errors,
         setError,
         removeError,
         getErrorMessageByFieldName,
