@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Container,
     InputSearchContainer,
@@ -14,16 +14,32 @@ import { Link } from "react-router-dom";
 // import Loader from "../../components/Loader";
 
 export default function Home() {
+    const [contacts, setContacts] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost:3001/contacts")
+            .then(async (response) => {
+                const json = await response.json();
+                console.log("response", response);
+                json.forEach((contact) => {
+                    console.log("contactName", contact.name);
+                });
+                setContacts(json);
+            })
+            .catch((error) => {
+                console.log("erro", error);
+            });
+    }, []);
     return (
         <Container>
-            {/* <Modal danger /> */}
-
-            {/* <Loader /> */}
             <InputSearchContainer>
                 <input type="text" placeholder="Pesquise pelo nome..."></input>
             </InputSearchContainer>
             <Header>
-                <strong>3 Contatos</strong>
+                <strong>
+                    {contacts.length}
+                    {contacts.length === 1 ? " contato" : " contatos"}
+                </strong>
                 <Link to="/new">Novo Contato</Link>
             </Header>
             <ListContainer>
@@ -33,20 +49,25 @@ export default function Home() {
                         <img src={arrow} alt="Arrow" width="24px" />
                     </button>
                 </header>
-                <Card>
+            </ListContainer>
+
+            {contacts.map((contact) => (
+                <Card key={contact.id}>
                     <div className="info">
                         <div className="contact-name">
-                            <strong>Matheus Lopes</strong>
-                            <small>instagram</small>
+                            <strong>{contact.name}</strong>
+                            {contact.category_name && (
+                                <small>{contact.category_name}</small>
+                            )}
                         </div>
-                        <span>matheuslopes@email.com</span>
-                        <span>(19)98765-4321</span>
+                        <span>{contact.email}</span>
+                        <span>{contact.phone}</span>
                     </div>
                     <div className="actions">
-                        <Link to="/edit/123">
+                        <Link to={`/edit/${contact.id}`}>
                             <img src={edit} alt="Edit Icon" width="20px"></img>
                         </Link>
-                        <button onClick={() => {}}>
+                        <button>
                             <img
                                 src={trash}
                                 alt="Delete Icon"
@@ -55,13 +76,7 @@ export default function Home() {
                         </button>
                     </div>
                 </Card>
-            </ListContainer>
+            ))}
         </Container>
     );
 }
-
-fetch("http://localhost:3001/contacts").then((response) => {
-    console.log("response", response).catch((error) => {
-        console.log("erro", error);
-    });
-});
