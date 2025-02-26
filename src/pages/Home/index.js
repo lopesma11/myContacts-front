@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
     Container,
     InputSearchContainer,
@@ -10,17 +10,18 @@ import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/trash-red.svg";
 import edit from "../../assets/images/icons/note-pencil-blue.svg";
 import { Link } from "react-router-dom";
-// import Modal from "../../components/Modal";
-// import Loader from "../../components/Loader";
 
 export default function Home() {
     const [contacts, setContacts] = useState([]);
     const [orderBy, setOrderBy] = useState("asc");
     const [searchTerm, setSearchTerm] = useState("");
-    const filteredContacts = contacts.filter(
-        (contact) =>
-            contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-        //contact.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+
+    const filteredContacts = useMemo(
+        () =>
+            contacts.filter((contact) =>
+                contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+            ),
+        [contacts, searchTerm]
     );
 
     useEffect(() => {
