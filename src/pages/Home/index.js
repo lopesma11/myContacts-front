@@ -10,11 +10,14 @@ import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/trash-red.svg";
 import edit from "../../assets/images/icons/note-pencil-blue.svg";
 import { Link } from "react-router-dom";
+import Loader from "../../components/Loader";
+import delay from "../../utils/delay.js";
 
 export default function Home() {
     const [contacts, setContacts] = useState([]);
     const [orderBy, setOrderBy] = useState("asc");
     const [searchTerm, setSearchTerm] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     const filteredContacts = useMemo(
         () =>
@@ -25,13 +28,19 @@ export default function Home() {
     );
 
     useEffect(() => {
+        setIsLoading(true);
         fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
             .then(async (response) => {
+                await delay(500);
+
                 const json = await response.json();
                 setContacts(json);
             })
             .catch((error) => {
                 console.log("erro", error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     }, [orderBy]);
 
@@ -45,6 +54,7 @@ export default function Home() {
 
     return (
         <Container>
+            <Loader isLoading={isLoading} />
             <InputSearchContainer>
                 <input
                     value={searchTerm}
