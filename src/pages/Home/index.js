@@ -7,12 +7,14 @@ import {
     Card,
     ErrorContainer,
     EmptyListContainer,
+    SearchNotFoundContainer,
 } from "../Home/styles";
 import arrow from "../../assets/images/icons/arrow.svg";
 import trash from "../../assets/images/icons/trash-red.svg";
 import edit from "../../assets/images/icons/note-pencil-blue.svg";
 import sadsmile from "../../assets/images/icons/smiley-sad.svg";
 import emptyBox from "../../assets/images/icons/package.svg";
+import magnifyingGlass from "../../assets/images/icons/magnifying-glass.svg";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Button from "../../components/Button.js";
@@ -69,8 +71,7 @@ export default function Home() {
         <Container>
             <Loader isLoading={isLoading} />
 
-            {contacts.length >
-            (
+            {contacts.length > 0 && (
                 <InputSearchContainer>
                     <input
                         value={searchTerm}
@@ -124,6 +125,21 @@ export default function Home() {
                                 acima para cadastrar o seu primeiro!
                             </p>
                         </EmptyListContainer>
+                    )}
+
+                    {contacts.length > 0 && filteredContacts.length < 1 && (
+                        <SearchNotFoundContainer>
+                            <img
+                                src={magnifyingGlass}
+                                alt="Magnifier Question"
+                                width="40px"
+                            ></img>
+
+                            <span>
+                                Nenhum resultado foi encontrado para{" "}
+                                <strong> {searchTerm} </strong>{" "}
+                            </span>
+                        </SearchNotFoundContainer>
                     )}
                     {filteredContacts.length > 0 && (
                         <ListHeader orderBy={orderBy}>
