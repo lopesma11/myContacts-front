@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
     Container,
     InputSearchContainer,
@@ -31,7 +31,7 @@ export default function Home() {
         [contacts, searchTerm]
     );
 
-    async function loadContacts() {
+    const loadContacts = useCallback(async () => {
         try {
             setIsLoading(true);
 
@@ -45,11 +45,11 @@ export default function Home() {
         } finally {
             setIsLoading(false);
         }
-    }
+    }, []);
 
     useEffect(() => {
         loadContacts();
-    }, [orderBy]);
+    }, [loadContacts]);
 
     const handleToogleOrderBy = () => {
         setOrderBy((prevState) => (prevState === "asc" ? "desc" : "asc"));
