@@ -17,7 +17,7 @@ import emptyBox from "../../assets/images/icons/package.svg";
 import magnifyingGlass from "../../assets/images/icons/magnifying-glass.svg";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
-import Button from "../../components/Button.js";
+import Button from "../../components/Button";
 import ContactsService from "../../services/ContactsService.js";
 
 export default function Home() {
