@@ -8,7 +8,10 @@ import toast from "../../utils/toast";
 
 export default function EditContact() {
     const [isLoading, setIsLoading] = useState(true);
+    const [contactName, setContactName] = useState("");
+
     const contactFormRef = useRef(null);
+
     const { id } = useParams();
     const history = useHistory();
 
@@ -21,6 +24,7 @@ export default function EditContact() {
 
                 console.log(contact);
                 setIsLoading(false);
+                setContactName(contact.name);
             } catch {
                 history.push("/");
                 toast({
@@ -33,12 +37,44 @@ export default function EditContact() {
         loadContact();
     }, [id, history]);
 
-    function handleSubmit() {}
+    async function handleSubmit(formData) {
+        try {
+            const contact = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                category_id: formData.categoryId,
+            };
+
+            const contactData = await ContactsService.updateContact(
+                id,
+                contact
+            );
+
+            setContactName(contactData.name);
+
+            toast({
+                type: "success",
+                text: "Contato editado com sucesso",
+            });
+        } catch (error) {
+            toast({
+                type: "danger",
+                text: "Ocorreu um erro ao editar o contato!",
+            });
+        }
+    }
 
     return (
         <>
             <Loader isLoading={isLoading} />
-            <PageHeader title="Editar Matheus Lopes" />
+            <PageHeader
+                title={
+                    isLoading
+                        ? "Carregando contato..."
+                        : `Editar ${contactName}`
+                }
+            />
             <ContactForm
                 ref={contactFormRef}
                 buttonLabel="Salvar Alterações"

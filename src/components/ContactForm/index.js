@@ -33,26 +33,21 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
         ref,
         () => ({
             setFieldsValue: (contact) => {
-                setName(contact.name);
-                setEmail(contact.email);
-                setPhone(contact.phone);
-                setCategoryId(contact.category_id);
+                setName(contact.name || "");
+                setEmail(contact.email || "");
+                setPhone(formatPhone(contact.phone || ""));
+                setCategoryId(contact.category_id || "");
+            },
+
+            resetFields: () => {
+                setName("");
+                setEmail("");
+                setPhone("");
+                setCategoryId("");
             },
         }),
         []
     );
-
-    // useEffect(() => {
-    //     const refObject = ref;
-    //     refObject.current = {
-    //         setFieldsValue: (contact) => {
-    //             setName(contact.name);
-    //             setEmail(contact.email);
-    //             setPhone(contact.phone);
-    //             setCategoryId(contact.category_id);
-    //         },
-    //     };
-    // }, [ref]);
 
     useEffect(() => {
         async function loadCategories() {
@@ -106,11 +101,6 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
         });
 
         setIsSubmitting(false);
-
-        setName("");
-        setEmail("");
-        setPhone("");
-        setCategoryId("");
     };
 
     return (
@@ -174,6 +164,8 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
         </Form>
     );
 });
+
+ContactForm.displayName = "ContactForm";
 
 ContactForm.propTypes = {
     buttonLabel: PropTypes.string.isRequired,
