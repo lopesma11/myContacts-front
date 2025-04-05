@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Button from "../../components/Button";
 import ContactsService from "../../services/ContactsService.js";
+import Modal from "../../components/Modal/";
 
 export default function Home() {
     const [contacts, setContacts] = useState([]);
@@ -70,6 +71,14 @@ export default function Home() {
     return (
         <Container>
             <Loader isLoading={isLoading} />
+
+            <Modal
+                danger
+                title={`Tem certeza que deseja remover o contato ${contacts.name}?`}
+                confirmLabel="Deletar"
+                onCancel={() => alert("Cancelou")}
+                onConfirm={() => alert("Confirmou")}
+            />
 
             {contacts.length > 0 && (
                 <InputSearchContainer>
