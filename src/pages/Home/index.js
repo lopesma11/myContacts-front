@@ -27,6 +27,8 @@ export default function Home() {
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [contactBeingDeleted, setContacBeingDeleted] = useState(null);
 
     const filteredContacts = useMemo(
         () =>
@@ -56,29 +58,45 @@ export default function Home() {
         loadContacts();
     }, [loadContacts]);
 
-    const handleToogleOrderBy = () => {
+    function handleToogleOrderBy() {
         setOrderBy((prevState) => (prevState === "asc" ? "desc" : "asc"));
-    };
+    }
 
-    const handleChangeSearchTerm = (event) => {
+    function handleChangeSearchTerm(event) {
         setSearchTerm(event.target.value);
-    };
+    }
 
-    const handleTryAgain = () => {
+    function handleTryAgain() {
         loadContacts();
-    };
+    }
+
+    function handleDeleteContact(contact) {
+        setContacBeingDeleted(contact);
+        setIsDeleteModalVisible(true);
+    }
+
+    function handleCloseDeleteModal() {
+        setIsDeleteModalVisible(false);
+    }
+
+    function handleConfirmDeleteContact() {}
 
     return (
         <Container>
             <Loader isLoading={isLoading} />
 
-            <Modal
-                danger
-                title={`Tem certeza que deseja remover o contato ${contacts.name}?`}
-                confirmLabel="Deletar"
-                onCancel={() => alert("Cancelou")}
-                onConfirm={() => alert("Confirmou")}
-            />
+            {isDeleteModalVisible && (
+                <Modal
+                    danger
+                    visible={isDeleteModalVisible}
+                    title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}" ?`}
+                    confirmLabel="Deletar"
+                    onCancel={handleCloseDeleteModal}
+                    onConfirm={handleConfirmDeleteContact}
+                >
+                    <p>Esta ação não poderá ser desfeita</p>
+                </Modal>
+            )}
 
             {contacts.length > 0 && (
                 <InputSearchContainer>
@@ -179,7 +197,10 @@ export default function Home() {
                                         width="20px"
                                     ></img>
                                 </Link>
-                                <button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDeleteContact(contact)}
+                                >
                                     <img
                                         src={trash}
                                         alt="Delete Icon"
