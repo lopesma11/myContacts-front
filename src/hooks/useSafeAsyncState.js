@@ -1,19 +1,12 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import useIsMounted from "./useIsMounted";
 export default function useSafeAsyncState(inicialState) {
     const [state, setState] = useState(inicialState);
 
-    const isMounted = useRef(false);
-
-    useEffect(() => {
-        isMounted.current = true;
-
-        return () => {
-            isMounted.current = false;
-        };
-    }, []);
+    const isMounted = useIsMounted();
 
     const setSafeAsyncState = useCallback((data) => {
-        if (isMounted.current) {
+        if (isMounted()) {
             setState(data);
         }
     }, []);
