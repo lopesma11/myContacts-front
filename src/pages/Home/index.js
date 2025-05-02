@@ -1,25 +1,14 @@
 import React from "react";
-import {
-    Container,
-    ListHeader,
-    Card,
-    ErrorContainer,
-    EmptyListContainer,
-    SearchNotFoundContainer,
-} from "../Home/styles";
-import arrow from "../../assets/images/icons/arrow.svg";
-import trash from "../../assets/images/icons/trash-red.svg";
-import edit from "../../assets/images/icons/note-pencil-blue.svg";
-import sadsmile from "../../assets/images/icons/smiley-sad.svg";
-import emptyBox from "../../assets/images/icons/package.svg";
-import magnifyingGlass from "../../assets/images/icons/magnifying-glass.svg";
-import { Link } from "react-router-dom";
+import { Container } from "../Home/styles";
 import Loader from "../../components/Loader";
-import Button from "../../components/Button";
-import Modal from "../../components/Modal/";
 import useHome from "./useHome.js";
 import InputSearch from "./components/InputSearch/index.js";
 import Header from "./components/Header/index.js";
+import ErrorStatus from "./components/ErrorStatus/index.js";
+import EmptyList from "./components/EmptyList/index.js";
+import SearchNotFound from "./components/SearchNotFound/index.js";
+import ContactsList from "./components/ContactsList/index.js";
+import Modal from "../../components/Modal/";
 
 export default function Home() {
     const {
@@ -56,88 +45,20 @@ export default function Home() {
                 qtyOfFilteredContacts={filteredContacts.length}
             />
 
-            {hasError && (
-                <ErrorContainer>
-                    <img src={sadsmile} alt="sad" />
-                    <div className="details">
-                        <span>Ocorreu um erro ao obter os seus contatos!</span>
-                        <Button type="button" onClick={handleTryAgain}>
-                            Tentar novamente
-                        </Button>
-                    </div>
-                </ErrorContainer>
-            )}
+            {hasError && <ErrorStatus onTryAgain={handleTryAgain} />}
 
             {!hasError && (
                 <>
-                    {contacts.length < 1 && !isLoading && (
-                        <EmptyListContainer>
-                            <img src={emptyBox} alt="Empty Box" width="100px" />
-                            <p>
-                                Você ainda não tem nenhum contato cadastrado
-                                Clique no botão <strong>Novo Contato</strong>
-                                acima para cadastrar o seu primeiro!
-                            </p>
-                        </EmptyListContainer>
-                    )}
-
+                    {contacts.length < 1 && !isLoading && <EmptyList />}
                     {contacts.length > 0 && filteredContacts.length < 1 && (
-                        <SearchNotFoundContainer>
-                            <img
-                                src={magnifyingGlass}
-                                alt="Magnifier Question"
-                                width="40px"
-                            ></img>
-
-                            <span>
-                                Nenhum resultado foi encontrado para{" "}
-                                <strong> {searchTerm} </strong>{" "}
-                            </span>
-                        </SearchNotFoundContainer>
+                        <SearchNotFound searchTerm={searchTerm} />
                     )}
-                    {filteredContacts.length > 0 && (
-                        <ListHeader orderBy={orderBy}>
-                            <button type="button" onClick={handleToogleOrderBy}>
-                                <span>Nome</span>
-                                <img src={arrow} alt="Arrow" width="24px" />
-                            </button>
-                        </ListHeader>
-                    )}
-
-                    {filteredContacts.map((contact) => (
-                        <Card key={contact.id}>
-                            <div className="info">
-                                <div className="contact-name">
-                                    <strong>{contact.name}</strong>
-                                    {contact.category.name && (
-                                        <small>{contact.category.name}</small>
-                                    )}
-                                </div>
-                                <span>{contact.email}</span>
-                                <span>{contact.phone}</span>
-                            </div>
-                            <div className="actions">
-                                <Link to={`/edit/${contact.id}`}>
-                                    <img
-                                        src={edit}
-                                        alt="Edit Icon"
-                                        width="20px"
-                                    ></img>
-                                </Link>
-                                <button
-                                    type="button"
-                                    onClick={() => handleDeleteContact(contact)}
-                                >
-                                    <img
-                                        src={trash}
-                                        alt="Delete Icon"
-                                        width="20px"
-                                    ></img>
-                                </button>
-                            </div>
-                        </Card>
-                    ))}
-
+                    <ContactsList
+                        filteredContacts={filteredContacts}
+                        orderBy={orderBy}
+                        onToogleOrderBy={handleToogleOrderBy}
+                        onDeleteContact={handleDeleteContact}
+                    />
                     <Modal
                         danger
                         isLoading={isLoadingDelete}
@@ -146,9 +67,7 @@ export default function Home() {
                         confirmLabel="Deletar"
                         onCancel={handleCloseDeleteModal}
                         onConfirm={handleConfirmDeleteContact}
-                    >
-                        <p>Esta ação não poderá ser desfeita</p>
-                    </Modal>
+                    ></Modal>
                 </>
             )}
         </Container>
