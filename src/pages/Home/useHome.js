@@ -31,6 +31,7 @@ export default function useHome() {
         } catch (error) {
             console.log("Caiu no catch", error);
             setHasError(true);
+            setContacts([]);
         } finally {
             setIsLoading(false);
         }
