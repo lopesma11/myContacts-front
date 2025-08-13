@@ -5,15 +5,16 @@ import useToastContainer from "./useToastContainer";
 
 export default function ToastContainer() {
     const {
-        messages,
+        items: messages,
         handleRemoveMessage,
         pendingRemovalMessagesIds,
         handleAnimationEnd,
+        renderList,
     } = useToastContainer();
 
     return (
         <Container>
-            {messages.map((message) => (
+            {renderList((message) => (
                 <ToastMessage
                     key={message.id}
                     message={message}
